@@ -137,7 +137,7 @@ graph TD
 
 | Nombre | Tipo | Descripción |
 |---|---|---|
-| `MICROSERVICE_URL` | `string` | URL base del servicio `vertexai-service`. Default: `https://fix-core-django-473011695031.us-central1.run.app` |
+| `MICROSERVICE_URL` | `string` | URL base del servicio `vertexai-service`. Default: `https://vertexai-service-473011695031.us-central1.run.app` |
 
 ### vertexai-service
 
@@ -164,7 +164,7 @@ graph TD
 ```bash
 cd fix-gateway/django_gateway
 python -m venv venv
-venv\Scripts\activate        # Windows
+venv\Scripts\activate        
 pip install -r requirements.txt
 python manage.py runserver
 ```
@@ -174,9 +174,9 @@ python manage.py runserver
 ```bash
 cd vertexai-service/django_microservice
 python -m venv venv
-venv\Scripts\activate        # Windows
+venv\Scripts\activate        
 pip install -r requirements.txt
-# Configurar credenciales GCP antes de ejecutar
+
 $env:GOOGLE_APPLICATION_CREDENTIALS="C:\ruta\al\service-account.json"
 python manage.py runserver
 ```
@@ -193,32 +193,30 @@ firebase serve
 
 ## Instrucciones de Despliegue
 
-Ambos servicios Django utilizan imágenes Docker sobre `python:3.11-slim` y se despliegan en Cloud Run con Gunicorn + Uvicorn workers escuchando en el puerto `8080`.
-
-### fix-gateway
-
-```bash
-cd fix-gateway/django_gateway
-docker build -t fix-api-gateway .
-gcloud run deploy fix-api-gateway \
-  --image fix-api-gateway \
-  --region us-central1 \
-  --set-env-vars MICROSERVICE_URL=https://fix-core-django-473011695031.us-central1.run.app \
-  --allow-unauthenticated
-```
+Ambos servicios Django se despliegan en Cloud Run escuchando en el puerto `8080` (utilizando Gunicorn + Uvicorn workers). Puedes desplegarlos directamente usando `gcloud run deploy --source` para que se construya automáticamente en la nube sin requerir Docker instalado de forma local.
 
 ### vertexai-service
 
 ```bash
 cd vertexai-service/django_microservice
-docker build -t fix-core-django .
-gcloud run deploy fix-core-django \
-  --image fix-core-django \
+gcloud run deploy vertexai-service \
+  --source . \
   --region us-central1 \
   --allow-unauthenticated
 ```
 
 El servicio de núcleo se ejecuta con `--workers 1 --timeout 120` para evitar condiciones de carrera en la inicialización del SDK `firebase-admin` y acomodar la latencia de Vertex AI.
+
+### fix-gateway
+
+```bash
+cd fix-gateway/django_gateway
+gcloud run deploy fix-gateway \
+  --source . \
+  --region us-central1 \
+  --set-env-vars MICROSERVICE_URL=https://vertexai-service-473011695031.us-central1.run.app \
+  --allow-unauthenticated
+```
 
 ### fix-client
 

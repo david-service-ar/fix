@@ -42,7 +42,7 @@ async def proxy_chat(request):
                 brain_endpoint,
                 json=chat_request.model_dump(),
                 headers=forward_headers, 
-                timeout=30.0
+                timeout=110.0
             )
             
             if response.status_code != 200:

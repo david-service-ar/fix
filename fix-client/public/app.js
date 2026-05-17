@@ -1,4 +1,4 @@
-const GATEWAY_URL = "https://fix-api-gateway-473011695031.us-central1.run.app/api/chat";
+const GATEWAY_URL = "https://fix-gateway-473011695031.us-central1.run.app/api/chat";
 
 const App = {
     user: null,
@@ -326,7 +326,7 @@ const App = {
         }
 
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
+        const timeoutId = setTimeout(() => controller.abort(), 110000);
 
         try {
             if (!this.user) throw new Error('SESSION_INVALID');
