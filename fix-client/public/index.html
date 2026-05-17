@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es" class="h-screen sm:h-[100dvh]">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fix — Tu asistente de IA.">
+  <title>Fix</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <link href="styles.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'system-ui', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+          colors: {
+            primary: '#0176d3', primaryHover: '#005fb2', primaryLight: '#eff6ff',
+            surface: '#ffffff', background: '#f1f5f9',
+            textMain: '#1e293b', textMuted: '#64748b', borderSubtle: '#e2e8f0',
+          },
+          boxShadow: {
+            card: '0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04)',
+            elevated: '0 4px 16px rgba(0,0,0,0.08),0 1px 4px rgba(0,0,0,0.04)',
+            floating: '0 8px 32px rgba(0,0,0,0.1),0 2px 8px rgba(0,0,0,0.06)',
+          },
+          keyframes: {
+            shimmer: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(400%)' } },
+            fadeIn: { from: { opacity: '0', transform: 'translateY(5px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+            fadeInUp: { from: { opacity: '0', transform: 'translate3d(0,18px,0)' }, to: { opacity: '1', transform: 'translate3d(0,0,0)' } },
+          },
+          animation: {
+            shimmer: 'shimmer 1s infinite linear',
+            fadeIn: 'fadeIn 0.35s cubic-bezier(0.16,1,0.3,1)',
+            fadeInUp: 'fadeInUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards',
+          },
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="h-screen sm:h-[100dvh] bg-background text-textMain overflow-hidden antialiased">
+
+  <div id="fix-overlay"
+    class="fixed inset-0 z-[100] bg-white flex items-center justify-center transition-opacity duration-700"
+    role="status" aria-label="Iniciando Fix">
+    <div class="flex flex-col items-center gap-5">
+      <div class="relative">
+        <div class="w-16 h-16 brand-logo rounded-2xl flex items-center justify-center shadow-xl" aria-hidden="true">
+          <span class="text-white font-bold text-3xl tracking-tighter">F</span>
+        </div>
+        <div class="absolute -inset-3 brand-logo rounded-3xl opacity-15 blur-xl pointer-events-none" aria-hidden="true">
+        </div>
+      </div>
+      <div class="flex flex-col items-center gap-2.5">
+        <span class="text-sm font-semibold text-slate-700 tracking-tight">Fix Agent</span>
+        <div class="h-[3px] w-36 bg-slate-100 rounded-full overflow-hidden" aria-hidden="true">
+          <div
+            class="h-full w-2/5 bg-gradient-to-r from-primary to-sky-400 rounded-full animate-[shimmer_1s_infinite_linear]">
+          </div>
+        </div>
+        <span class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">Iniciando...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex h-full">
+
+    <aside
+      class="w-[260px] sidebar-gradient border-r border-borderSubtle flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:translate-x-0 absolute md:relative z-50 h-full -translate-x-full shadow-floating md:shadow-none"
+      id="main-sidebar" aria-label="Panel de navegación">
+
+      <div class="h-16 flex items-center px-5 border-b border-borderSubtle/70">
+        <div class="flex items-center gap-3" id="ai-avatar">
+          <div
+            class="w-8 h-8 brand-logo text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md flex-shrink-0"
+            aria-hidden="true">F</div>
+          <span class="font-semibold text-[15px] text-slate-800 tracking-tight">Fix <span
+              class="text-primary font-normal">Agent</span></span>
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto py-5 px-3 space-y-0.5 custom-scrollbar">
+        <button id="btn-new-chat" aria-label="Iniciar nueva tarea"
+          class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl mb-5 group relative overflow-hidden
+                 bg-gradient-to-r from-primary to-sky-500 text-white font-medium text-sm
+                 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35
+                 hover:from-primaryHover hover:to-sky-600 active:scale-[0.98]
+                 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50">
+          <i class="fas fa-plus text-xs transition-transform duration-300 group-hover:rotate-90" aria-hidden="true"></i>
+          <span>Nueva Tarea</span>
+          <div class="absolute inset-0 bg-white/[0.07] opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-hidden="true"></div>
+        </button>
+
+        <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest px-4 pb-2 pt-1">Espacio de trabajo
+        </p>
+
+        <button id="btn-current-consulta" aria-current="page"
+          class="nav-item nav-item-active w-full flex items-center gap-3 px-4 py-2.5 rounded-r-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+          <i class="fas fa-comment-dots text-sm" aria-hidden="true"></i>
+          <span class="text-sm font-medium">Panel Actual</span>
+        </button>
+
+        <button id="btn-history"
+          class="nav-item flex items-center gap-3 px-4 py-2.5 w-full rounded-r-xl text-slate-500 hover:text-slate-700 cursor-pointer text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+          <i class="fas fa-clock-rotate-left text-sm w-4 text-center" aria-hidden="true"></i>
+          <span class="text-sm">Historial</span>
+        </button>
+      </div>
+
+      <div class="p-4 border-t border-borderSubtle/70 space-y-3">
+        <div class="flex items-center justify-between px-2">
+          <label for="voice-toggle" class="text-xs text-slate-500 font-medium cursor-pointer flex items-center gap-2">
+            <i class="fas fa-volume-high text-slate-400 text-[11px]" aria-hidden="true"></i>
+            Lectura de Voz
+          </label>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="voice-toggle" class="sr-only peer" aria-label="Activar lectura de voz">
+            <div class="w-9 h-5 bg-slate-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-primary/40
+                        after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                        after:bg-white after:border after:border-slate-200 after:rounded-full
+                        after:h-4 after:w-4 after:transition-all after:shadow-sm
+                        peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white">
+            </div>
+          </label>
+        </div>
+
+        <div class="px-2 pb-1 mt-2 flex flex-col gap-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">Consultas Prueba</span>
+            <span class="text-[11px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full"
+              id="queries-counter">--/10</span>
+          </div>
+        </div>
+
+        <div id="user-profile-btn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false"
+          class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white hover:shadow-card border border-transparent hover:border-borderSubtle cursor-pointer transition-all duration-150 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+          <div
+            class="w-8 h-8 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 border-2 border-white flex items-center justify-center text-xs font-bold text-slate-600 avatar shadow-sm flex-shrink-0"
+            aria-hidden="true">U</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-700 truncate leading-tight" id="user-name">Usuario</p>
+            <p class="text-[10px] text-emerald-600 flex items-center gap-1 mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 online-dot" aria-hidden="true"></span>
+              <span>Activo</span>
+            </p>
+          </div>
+          <i class="fas fa-ellipsis-vertical text-xs text-slate-300" aria-hidden="true"></i>
+
+          <div id="user-menu"
+            class="hidden absolute bottom-full left-0 w-full mb-2 bg-white border border-borderSubtle rounded-xl shadow-floating overflow-hidden z-[60]"
+            role="menu">
+            <div class="px-3 py-2 border-b border-slate-100">
+              <p class="text-xs text-slate-400 font-medium">Mi cuenta</p>
+            </div>
+            <button onclick="App.logout()" role="menuitem"
+              class="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors text-left font-medium focus-visible:outline-none focus-visible:bg-red-50 group">
+              <i class="fas fa-arrow-right-from-bracket text-xs group-hover:translate-x-0.5 transition-transform"
+                aria-hidden="true"></i>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col relative h-full w-full bg-background overflow-hidden">
+
+      <div
+        class="md:hidden flex items-center justify-between px-4 py-3 bg-white/80 backdrop-blur-md border-b border-borderSubtle sticky top-0 z-40">
+        <div class="flex items-center gap-2.5">
+          <div
+            class="w-7 h-7 brand-logo rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-sm"
+            aria-hidden="true">F</div>
+          <span class="font-bold text-base text-slate-800">Fix <span
+              class="text-primary font-normal">Agent</span></span>
+        </div>
+        <button data-hamburger aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="main-sidebar"
+          class="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-primary hover:bg-slate-100 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+          <i class="fas fa-bars text-base" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="messages-container" class="flex-1 overflow-y-auto px-4 md:px-10 pt-8 space-y-4 custom-scrollbar"
+        style="padding-bottom:200px;" aria-live="polite" aria-label="Conversación con Fix AI">
+
+        <div id="empty-state"
+          class="h-full flex flex-col items-center justify-center max-w-xl mx-auto text-center animate-fade-in-up pb-16">
+          <div class="relative mb-7">
+            <div class="w-16 h-16 brand-logo rounded-2xl flex items-center justify-center shadow-xl mx-auto">
+              <span class="text-white font-bold text-2xl tracking-tighter" aria-hidden="true">F</span>
+            </div>
+            <div class="absolute -inset-3 brand-logo rounded-3xl opacity-15 blur-xl pointer-events-none"
+              aria-hidden="true"></div>
+          </div>
+          <h1 class="text-2xl md:text-[26px] font-semibold text-slate-800 mb-3 leading-tight">¿Qué tarea gestionamos
+            hoy?</h1>
+          <p class="text-slate-500 mb-10 max-w-sm text-sm leading-relaxed">Selecciona una acción rápida o describe tu
+            requerimiento en el panel inferior.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
+            <button onclick="ChatUI.setInput('Analiza este código...')" aria-label="Iniciar auditoría de código"
+              class="quick-card bg-white p-5 rounded-2xl border border-borderSubtle shadow-card hover:shadow-elevated hover:border-primary/25 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+              <div
+                class="w-10 h-10 rounded-xl bg-blue-50 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-200 shadow-sm"
+                aria-hidden="true">
+                <i class="fas fa-code text-sm"></i>
+              </div>
+              <span class="text-sm font-semibold text-slate-700 block mb-1">Auditoría de Código</span>
+              <span class="text-xs text-slate-400">Revisión y optimización</span>
+            </button>
+
+            <button onclick="ChatUI.setInput('Genera un reporte de...')" aria-label="Generar reporte"
+              class="quick-card bg-white p-5 rounded-2xl border border-borderSubtle shadow-card hover:shadow-elevated hover:border-violet-300/60 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/40">
+              <div
+                class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center mb-4 group-hover:bg-violet-600 group-hover:text-white transition-all duration-200 shadow-sm"
+                aria-hidden="true">
+                <i class="fas fa-file-lines text-sm"></i>
+              </div>
+              <span class="text-sm font-semibold text-slate-700 block mb-1">Generar Reporte</span>
+              <span class="text-xs text-slate-400">Documentación automática</span>
+            </button>
+
+            <button onclick="ChatUI.setInput('Estrategia de despliegue...')" aria-label="Diseñar arquitectura"
+              class="quick-card bg-white p-5 rounded-2xl border border-borderSubtle shadow-card hover:shadow-elevated hover:border-emerald-300/60 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40">
+              <div
+                class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200 shadow-sm"
+                aria-hidden="true">
+                <i class="fas fa-diagram-project text-sm"></i>
+              </div>
+              <span class="text-sm font-semibold text-slate-700 block mb-1">Arquitectura</span>
+              <span class="text-xs text-slate-400">Diseño de sistemas</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="history-container"
+        class="hidden flex-1 overflow-y-auto px-4 md:px-10 pt-8 pb-10 space-y-4 custom-scrollbar"
+        aria-label="Historial de consultas">
+        <div class="max-w-3xl mx-auto animate-fade-in-up">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-b border-borderSubtle pb-4">
+            <i class="fas fa-clock-rotate-left text-primary"></i> Consultas Anteriores
+          </h2>
+          <div id="history-list" class="space-y-3">
+            <div class="text-center py-10 text-slate-400 text-sm">
+              Cargando tu historial...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="input-container-wrapper"
+        class="absolute bottom-0 w-full px-4 md:px-10 pb-5 pt-3 bg-gradient-to-t from-background via-background/95 to-transparent z-30 pointer-events-none">
+        <div class="max-w-3xl mx-auto pointer-events-auto">
+          <div class="input-panel">
+            <div class="flex items-end gap-3 px-4 pt-3.5 pb-3">
+              <label for="chat-input" class="sr-only">Describe tu requerimiento</label>
+              <textarea id="chat-input" rows="1" placeholder="Describe tu requerimiento..."
+                class="w-full bg-transparent border-none text-slate-700 placeholder-slate-400 text-[13.5px] focus:ring-0 resize-none max-h-[150px] py-0 custom-scrollbar leading-relaxed"></textarea>
+              <button id="send-btn" disabled aria-label="Enviar mensaje">
+                <i class="fas fa-paper-plane text-[13px]" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between px-4 py-2 border-t border-slate-100">
+              <div class="flex items-center gap-2 text-slate-300">
+                <button class="hover:text-slate-500 transition-colors" aria-hidden="true" tabindex="-1">
+                  <i class="fas fa-paperclip text-[11px]"></i>
+                </button>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="hidden md:block text-[10px] text-slate-400">Shift+Enter para nueva línea</span>
+                <span class="text-slate-300 hidden md:block">·</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" aria-hidden="true"></span>
+                <span class="text-[10px] font-medium text-slate-400 font-mono">FIX AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

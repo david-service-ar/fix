@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fix Agent — Portal de acceso al asistente de IA para ingeniería de software.">
+  <title>Fix | Acceso Seguro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="styles.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: '#0176d3',
+            primaryHover: '#005fb2',
+          },
+          keyframes: {
+            fadeInUp: {
+              from: { opacity: '0', transform: 'translate3d(0, 20px, 0)' },
+              to: { opacity: '1', transform: 'translate3d(0, 0, 0)' },
+            },
+            shimmer: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(400%)' },
+            },
+          },
+          animation: {
+            'fadeInUp': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'shimmer': 'shimmer 2s infinite linear',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    .login-bg {
+      background-color: #0f172a;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(1, 118, 211, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 80%, rgba(2, 132, 199, 0.12) 0%, transparent 60%);
+    }
+
+    .grid-overlay {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .card-glass {
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.06),
+        0 24px 64px rgba(0, 0, 0, 0.22),
+        0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .logo-glow::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      background: linear-gradient(135deg, #0176d3, #0284c7);
+      border-radius: 28px;
+      opacity: 0.25;
+      filter: blur(16px);
+      z-index: -1;
+    }
+
+    .google-btn {
+      background: white;
+      border: 1.5px solid #e2e8f0;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease, background 0.15s ease;
+    }
+
+    .google-btn:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      background: #fafafa;
+      transform: translateY(-1px);
+    }
+
+    .google-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .google-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .shimmer-line {
+      position: relative;
+      overflow: hidden;
+      background: #e2e8f0;
+    }
+
+    .shimmer-line::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      animation: shimmer 2s infinite linear;
+    }
+  </style>
+</head>
+
+<body class="h-full login-bg flex items-center justify-center p-4 relative overflow-hidden">
+
+  <div class="absolute inset-0 grid-overlay" aria-hidden="true"></div>
+
+  <div
+    class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+    aria-hidden="true"></div>
+
+  <div class="relative w-full max-w-sm animate-fade-in-up">
+
+    <div class="card-glass rounded-2xl overflow-hidden">
+
+      <div class="px-8 pt-10 pb-8 flex flex-col items-center text-center">
+        <div class="relative mb-7 logo-glow">
+          <div class="w-14 h-14 brand-logo rounded-2xl flex items-center justify-center shadow-xl">
+            <span class="text-white font-bold text-2xl tracking-tighter">F</span>
+          </div>
+        </div>
+
+        <h1 class="text-[22px] font-semibold text-slate-800 leading-tight tracking-tight mb-1">
+          Fix <span class="text-primary">Agent</span>
+        </h1>
+        <p class="text-xs text-slate-400 uppercase tracking-widest font-medium mb-8">Portal de Acceso</p>
+
+        <div id="error-alert-placeholder" class="empty:hidden w-full mb-5"></div>
+
+        <p class="text-sm text-slate-600 font-medium mb-5">Bienvenido de nuevo</p>
+
+        <button id="login-button"
+          class="google-btn w-full flex items-center justify-center gap-3 py-3 px-5 rounded-xl text-slate-700 font-medium text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
+          <span class="btn-content flex items-center gap-3">
+            <svg class="w-[18px] h-[18px] flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true">
+              <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                <path fill="#4285F4"
+                  d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z" />
+                <path fill="#34A853"
+                  d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z" />
+                <path fill="#FBBC05"
+                  d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.734 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z" />
+                <path fill="#EA4335"
+                  d="M -14.754 43.989 C -12.984 43.989 -11.424 44.599 -10.174 45.789 L -6.704 42.319 C -8.804 40.359 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z" />
+              </g>
+            </svg>
+            <span>Continuar con Google</span>
+          </span>
+        </button>
+
+        <div class="mt-6 flex items-center gap-3 w-full">
+          <div class="flex-1 h-px bg-slate-100"></div>
+          <span class="text-[11px] text-slate-400 font-medium">Acceso seguro</span>
+          <div class="flex-1 h-px bg-slate-100"></div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-center gap-4 text-[11px] text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Cifrado SSL
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Auth de Google
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Sin contraseñas
+          </span>
+        </div>
+      </div>
+
+      <div class="px-8 py-4 border-t border-slate-100 flex justify-between items-center bg-slate-50/60">
+        <span class="text-[11px] text-slate-400">&copy;2025 Fix - Todos los derechos reservados</span>
+        <div class="flex gap-4">
+          <a href="#" class="text-[11px] text-slate-400 hover:text-primary transition-colors">Privacidad</a>
+          <a href="#" class="text-[11px] text-slate-400 hover:text-primary transition-colors">Soporte</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-[11px] text-white/30 mt-5">Powered by Google Cloud</p>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="login.js"></script>
+</body>
+
+</html>

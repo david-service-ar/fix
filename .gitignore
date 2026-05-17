@@ -1,0 +1,79 @@
+# ============================================================
+# .gitignore raíz del monorepo fix
+# Actúa como red de seguridad global para todos los servicios
+# ============================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# --- Entornos Virtuales ---
+venv/
+env/
+.venv/
+
+# --- Variables de Entorno ---
+.env
+.env.local
+.env.*.local
+
+# --- Credenciales y Service Accounts (NUNCA subir) ---
+*service-account*.json
+*service_account*.json
+credentials.json
+gcloud-key.json
+application_default_credentials.json
+*.p12
+*.pem
+
+# --- Bases de Datos Locales ---
+*.sqlite
+*.sqlite3
+*.db
+db.sqlite3
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Firebase ---
+.firebase/
+firebase-debug.log*
+.firebaserc.local
+
+# --- Django ---
+staticfiles/
+media/
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
+.nyc_output
+coverage/
+
+# --- Build / Distribución ---
+dist/
+build/
+*.egg-info/
+node_modules/
+
+# --- Docker ---
+*.env.docker
+
+# --- Sistema Operativo ---
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.agents/

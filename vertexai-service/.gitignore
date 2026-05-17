@@ -1,0 +1,50 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# --- Entornos Virtuales ---
+venv/
+env/
+.venv/
+
+# --- Variables de Entorno ---
+.env
+.env.local
+.env.*.local
+
+# --- Logs ---
+*.log
+
+# --- Google Cloud & Firebase (credenciales — NO excluir todos los .json) ---
+*service-account*.json
+*service_account*.json
+credentials.json
+gcloud-key.json
+application_default_credentials.json
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Bases de Datos Locales ---
+*.sqlite3
+*.db
+db.sqlite3
+
+# --- Django ---
+staticfiles/
+media/
+
+# --- Build / Distribución ---
+dist/
+build/
+*.egg-info/
+
+# --- Sistema Operativo e IDEs ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

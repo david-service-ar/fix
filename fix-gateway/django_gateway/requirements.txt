@@ -1,0 +1,6 @@
+django
+django-cors-headers
+httpx
+pydantic
+gunicorn
+uvicorn
