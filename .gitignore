@@ -1,6 +1,5 @@
 # ============================================================
-# .gitignore raíz del monorepo fix
-# Actúa como red de seguridad global para todos los servicios
+# .gitignore raíz 
 # ============================================================
 
 # --- Python ---
