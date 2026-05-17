@@ -29,6 +29,7 @@ La comunicación entre `fix-client` → `fix-gateway` → `vertexai-service` es 
 | Resaltado de código | highlight.js | Bloques `<pre><code>` en respuestas |
 | Partículas | particles.js | Efecto de fondo |
 | Animaciones | GSAP | Botones magnéticos |
+| Animaciones SVG | SVG nativo | Logo Arc Reactor |
 | Tilt | VanillaTilt | Cards con efecto 3D |
 | API Gateway | Django 6 + ASGI | Uvicorn workers vía Gunicorn |
 | HTTP cliente (gateway) | httpx | Comunicación asíncrona gateway → microservicio |

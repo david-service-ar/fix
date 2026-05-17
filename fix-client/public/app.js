@@ -440,6 +440,59 @@ const App = {
 };
 
 const ChatUI = {
+    ARC_REACTOR_SVG: `
+        <div class="brand-logo" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; transform: scale(1.1);">
+                <defs>
+                  <filter id="f-reactor-glow-chat" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur1" />
+                    <feGaussianBlur stdDeviation="6" result="blur2" />
+                    <feMerge>
+                      <feMergeNode in="blur2" />
+                      <feMergeNode in="blur1" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <linearGradient id="f-grad-core-chat" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="100%" stop-color="#38bdf8"/>
+                  </linearGradient>
+                </defs>
+                <g filter="url(#f-reactor-glow-chat)">
+                  <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
+                    <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15" fill="none" opacity="0.7">
+                    <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.9">
+                    <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s" repeatCount="indefinite" />
+                  </circle>
+                  <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z" fill="url(#f-grad-core-chat)">
+                    <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4">
+                    <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4">
+                    <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                  </path>
+                  <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                  <circle cx="39" cy="31" r="3.5" fill="#ffffff">
+                    <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="39" cy="68" r="3.5" fill="#ffffff">
+                    <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                  </circle>
+                  <line x1="15" y1="50" x2="85" y2="50" stroke="#bae6fd" stroke-width="1.5" opacity="0.7">
+                    <animate attributeName="y1" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                    <animate attributeName="y2" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                  </line>
+                </g>
+            </svg>
+        </div>
+    `,
+
     get container() {
         return document.getElementById('messages-container');
     },
@@ -464,7 +517,7 @@ const ChatUI = {
         if (isBot) {
             html = `
             <div class="msg-row" id="${msgId}" role="article" aria-label="Respuesta de Fix AI">
-                <div class="ai-msg-avatar" aria-hidden="true">F</div>
+                <div class="ai-msg-avatar" aria-hidden="true">${this.ARC_REACTOR_SVG}</div>
                 <div class="min-w-0">
                     <div class="bot-bubble">
                         <div class="prose prose-sm max-w-none message-content-text">${content}</div>
@@ -510,7 +563,7 @@ const ChatUI = {
 
         const html = `
             <div class="msg-row" id="${msgId}" role="article" aria-label="Respuesta de Fix AI">
-                <div class="ai-msg-avatar" aria-hidden="true">F</div>
+                <div class="ai-msg-avatar" aria-hidden="true">${this.ARC_REACTOR_SVG}</div>
                 <div class="min-w-0">
                     <div class="bot-bubble">
                         <div class="prose prose-sm max-w-none message-content-text">${content}</div>
@@ -540,7 +593,7 @@ const ChatUI = {
 
         const html = `
             <div class="msg-row" id="${id}" role="status" aria-label="Fix AI está procesando">
-                <div class="ai-msg-avatar" aria-hidden="true">F</div>
+                <div class="ai-msg-avatar" aria-hidden="true">${this.ARC_REACTOR_SVG}</div>
                 <div class="loading-bubble">
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>

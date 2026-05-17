@@ -44,11 +44,17 @@
         radial-gradient(ellipse 40% 30% at 80% 80%, rgba(2, 132, 199, 0.12) 0%, transparent 60%);
     }
 
+    @keyframes moveGrid {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+
     .grid-overlay {
       background-image:
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
       background-size: 40px 40px;
+      animation: moveGrid 15s linear infinite;
     }
 
     .card-glass {
@@ -112,7 +118,8 @@
 
 <body class="h-full login-bg flex items-center justify-center p-4 relative overflow-hidden">
 
-  <div class="absolute inset-0 grid-overlay" aria-hidden="true"></div>
+  <canvas id="network-canvas" class="absolute inset-0 w-full h-full opacity-50" style="z-index: 0;" aria-hidden="true"></canvas>
+  <div class="absolute inset-0 grid-overlay pointer-events-none" aria-hidden="true" style="z-index: 1;"></div>
 
   <div
     class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"
@@ -125,7 +132,54 @@
       <div class="px-8 pt-10 pb-8 flex flex-col items-center text-center">
         <div class="relative mb-7 logo-glow">
           <div class="w-14 h-14 brand-logo rounded-2xl flex items-center justify-center shadow-xl">
-            <span class="text-white font-bold text-2xl tracking-tighter">F</span>
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; transform: scale(1.1);">
+              <defs>
+                <filter id="f-reactor-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur1" />
+                  <feGaussianBlur stdDeviation="6" result="blur2" />
+                  <feMerge>
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="f-grad-core" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#38bdf8"/>
+                </linearGradient>
+              </defs>
+              <g filter="url(#f-reactor-glow)">
+                <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15" fill="none" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.9">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s" repeatCount="indefinite" />
+                </circle>
+                <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z" fill="url(#f-grad-core)">
+                  <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="39" cy="31" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="39" cy="68" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <line x1="15" y1="50" x2="85" y2="50" stroke="#bae6fd" stroke-width="1.5" opacity="0.7">
+                  <animate attributeName="y1" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                  <animate attributeName="y2" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                </line>
+              </g>
+            </svg>
           </div>
         </div>
 
@@ -208,6 +262,90 @@
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
   <script src="firebase-config.js"></script>
   <script src="login.js"></script>
+  <script>
+    const canvas = document.getElementById('network-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+      update() {
+        if (this.x > canvas.width || this.x < 0) {
+          this.directionX = -this.directionX;
+        }
+        if (this.y > canvas.height || this.y < 0) {
+          this.directionY = -this.directionY;
+        }
+        this.x += this.directionX;
+        this.y += this.directionY;
+        this.draw();
+      }
+    }
+
+    function init() {
+      particlesArray = [];
+      let numberOfParticles = (canvas.height * canvas.width) / 10000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 0.5;
+        let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
+        let directionX = (Math.random() * 0.4) - 0.2;
+        let directionY = (Math.random() * 0.4) - 0.2;
+        let color = 'rgba(2, 132, 199, 0.8)';
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+      }
+      connect();
+    }
+
+    function connect() {
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + 
+                         ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          if (distance < 18000) {
+            let opacityValue = 1 - (distance / 18000);
+            ctx.strokeStyle = `rgba(1, 118, 211, ${opacityValue * 0.4})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    init();
+    animate();
+  </script>
 </body>
 
 </html>
