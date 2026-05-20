@@ -45,8 +45,13 @@
     }
 
     @keyframes moveGrid {
-      0% { background-position: 0 0; }
-      100% { background-position: 40px 40px; }
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 40px 40px;
+      }
     }
 
     .grid-overlay {
@@ -118,7 +123,8 @@
 
 <body class="h-full login-bg flex items-center justify-center p-4 relative overflow-hidden">
 
-  <canvas id="network-canvas" class="absolute inset-0 w-full h-full opacity-50" style="z-index: 0;" aria-hidden="true"></canvas>
+  <canvas id="network-canvas" class="absolute inset-0 w-full h-full opacity-50" style="z-index: 0;"
+    aria-hidden="true"></canvas>
   <div class="absolute inset-0 grid-overlay pointer-events-none" aria-hidden="true" style="z-index: 1;"></div>
 
   <div
@@ -132,7 +138,8 @@
       <div class="px-8 pt-10 pb-8 flex flex-col items-center text-center">
         <div class="relative mb-7 logo-glow">
           <div class="w-14 h-14 brand-logo rounded-2xl flex items-center justify-center shadow-xl">
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; transform: scale(1.1);">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="width:100%; height:100%; transform: scale(1.1);">
               <defs>
                 <filter id="f-reactor-glow" x="-50%" y="-50%" width="200%" height="200%">
                   <feGaussianBlur stdDeviation="2.5" result="blur1" />
@@ -144,27 +151,35 @@
                   </feMerge>
                 </filter>
                 <linearGradient id="f-grad-core" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#ffffff"/>
-                  <stop offset="100%" stop-color="#38bdf8"/>
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#38bdf8" />
                 </linearGradient>
               </defs>
               <g filter="url(#f-reactor-glow)">
                 <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
-                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s" repeatCount="indefinite" />
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s"
+                    repeatCount="indefinite" />
                 </circle>
-                <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15" fill="none" opacity="0.7">
-                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+                <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15"
+                  fill="none" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
+                    repeatCount="indefinite" />
                 </circle>
-                <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none" opacity="0.9">
-                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s" repeatCount="indefinite" />
+                <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none"
+                  opacity="0.9">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s"
+                    repeatCount="indefinite" />
                 </circle>
-                <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z" fill="url(#f-grad-core)">
+                <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z"
+                  fill="url(#f-grad-core)">
                   <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
                 </path>
-                <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4">
+                <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
                   <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
                 </path>
-                <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 4">
+                <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
                   <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
                 </path>
                 <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
@@ -328,8 +343,8 @@
     function connect() {
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
-          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + 
-                         ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
           if (distance < 18000) {
             let opacityValue = 1 - (distance / 18000);
             ctx.strokeStyle = `rgba(1, 118, 211, ${opacityValue * 0.4})`;
