@@ -1,0 +1,54 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# --- Entornos Virtuales ---
+venv/
+env/
+.venv/
+
+# --- Variables de Entorno ---
+.env
+.env.local
+.env.*.local
+
+# --- Bases de datos locales ---
+*.sqlite
+*.sqlite3
+db.sqlite3
+
+# --- Logs ---
+*.log
+
+# --- Migraciones auto-generadas (mantener __init__.py) ---
+# Las migraciones SÍ se suben; solo se excluyen compilados
+
+# --- Google Cloud / Credenciales ---
+*service-account*.json
+*service_account*.json
+credentials.json
+gcloud-key.json
+
+# --- Django ---
+staticfiles/
+media/
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Build / Distribución ---
+dist/
+build/
+*.egg-info/
+
+# --- Sistema Operativo ---
+.DS_Store
+Thumbs.db
+
+# --- IDEs ---
+.vscode/
+.idea/

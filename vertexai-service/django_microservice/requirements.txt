@@ -1,0 +1,7 @@
+django
+django-cors-headers
+google-cloud-aiplatform
+firebase-admin
+pydantic
+gunicorn
+uvicorn

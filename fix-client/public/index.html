@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fix — Tu asistente de IA.">
+  <title>Fix</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <link href="css/base.css" rel="stylesheet">
+  <link href="css/animations.css" rel="stylesheet">
+  <link href="css/layout.css" rel="stylesheet">
+  <link href="css/components.css" rel="stylesheet">
+  <link href="css/chat.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div id="fix-overlay" class="app-overlay" role="status" aria-label="Iniciando Fix">
+    <div class="app-overlay-content">
+      <div class="app-overlay-logo-wrapper">
+        <div class="brand-logo shadow-elevated" aria-hidden="true">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="f-reactor-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.5" result="blur1" />
+                <feGaussianBlur stdDeviation="6" result="blur2" />
+                <feMerge>
+                  <feMergeNode in="blur2" />
+                  <feMergeNode in="blur1" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <linearGradient id="f-grad-core" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="100%" stop-color="#38bdf8" />
+              </linearGradient>
+            </defs>
+            <g filter="url(#f-reactor-glow)">
+              <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
+                <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s"
+                  repeatCount="indefinite" />
+              </circle>
+              <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15"
+                fill="none" opacity="0.7">
+                <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
+                  repeatCount="indefinite" />
+              </circle>
+              <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none"
+                opacity="0.9">
+                <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s"
+                  repeatCount="indefinite" />
+              </circle>
+              <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z"
+                fill="url(#f-grad-core)">
+                <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+              </path>
+              <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                stroke-dasharray="4 4">
+                <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+              </path>
+              <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                stroke-dasharray="4 4">
+                <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+              </path>
+              <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+              <circle cx="39" cy="31" r="3.5" fill="#ffffff">
+                <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="39" cy="68" r="3.5" fill="#ffffff">
+                <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+              </circle>
+              <line x1="15" y1="50" x2="85" y2="50" stroke="#bae6fd" stroke-width="1.5" opacity="0.7">
+                <animate attributeName="y1" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                <animate attributeName="y2" values="15;85;15" dur="4s" repeatCount="indefinite" />
+              </line>
+            </g>
+          </svg>
+        </div>
+        <div class="logo-shadow" aria-hidden="true"></div>
+      </div>
+      <div class="app-overlay-text">
+        <span class="app-overlay-title">Fix Agent</span>
+        <div class="app-overlay-bar" aria-hidden="true">
+          <div class="app-overlay-progress animate-shimmer"></div>
+        </div>
+        <span class="app-overlay-status">Iniciando...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="main-sidebar" aria-label="Panel de navegación">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-group" id="ai-avatar">
+          <div class="sidebar-logo brand-logo shadow-md" aria-hidden="true">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="width:100%; height:100%; transform: scale(1.1);">
+              <defs>
+                <filter id="f-reactor-glow2" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur1" />
+                  <feGaussianBlur stdDeviation="6" result="blur2" />
+                  <feMerge>
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="f-grad-core2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+              </defs>
+              <g filter="url(#f-reactor-glow2)">
+                <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s"
+                    repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15"
+                  fill="none" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
+                    repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none"
+                  opacity="0.9">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s"
+                    repeatCount="indefinite" />
+                </circle>
+                <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z"
+                  fill="url(#f-grad-core2)">
+                  <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="39" cy="31" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="39" cy="68" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <line x1="15" y1="50" x2="85" y2="50" stroke="#bae6fd" stroke-width="1.5" opacity="0.7">
+                  <animate attributeName="y1" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                  <animate attributeName="y2" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                </line>
+              </g>
+            </svg>
+          </div>
+          <span class="sidebar-title">Fix <span>Agent</span></span>
+        </div>
+      </div>
+
+      <div class="sidebar-nav custom-scrollbar">
+        <button id="btn-new-chat" aria-label="Iniciar nueva tarea" class="btn-new-chat">
+          <i class="fas fa-plus" aria-hidden="true"></i>
+          <span>Nueva Tarea</span>
+          <div class="btn-new-chat-overlay" aria-hidden="true"></div>
+        </button>
+
+        <p class="nav-section-title">Espacio de trabajo</p>
+
+        <button id="btn-current-consulta" aria-current="page" class="nav-item is-active">
+          <i class="fas fa-comment-dots" aria-hidden="true"></i>
+          <span>Panel Actual</span>
+        </button>
+
+        <button id="btn-history" class="nav-item">
+          <i class="fas fa-clock-rotate-left" aria-hidden="true"></i>
+          <span>Historial</span>
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="voice-toggle-row">
+          <label for="voice-toggle" class="voice-toggle-label">
+            <i class="fas fa-volume-high" aria-hidden="true"></i>
+            Lectura de Voz
+          </label>
+          <label class="toggle-switch">
+            <input type="checkbox" id="voice-toggle" aria-label="Activar lectura de voz">
+            <div class="toggle-track"></div>
+          </label>
+        </div>
+
+        <div class="quota-row">
+          <div class="quota-header">
+            <span class="quota-title">Consultas Prueba</span>
+            <span class="quota-badge" id="queries-counter">--/10</span>
+          </div>
+        </div>
+
+        <div id="user-profile-btn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false"
+          class="user-profile-btn">
+          <div class="user-avatar" aria-hidden="true">U</div>
+          <div class="user-info">
+            <p class="user-name" id="user-name">Usuario</p>
+            <p class="user-status">
+              <span class="online-dot" aria-hidden="true"></span>
+              <span>Activo</span>
+            </p>
+          </div>
+          <i class="fas fa-ellipsis-vertical" aria-hidden="true"></i>
+
+          <div id="user-menu" class="user-menu is-hidden" role="menu">
+            <div class="user-menu-header">
+              <p>Mi cuenta</p>
+            </div>
+            <button onclick="App.logout()" role="menuitem" class="btn-logout">
+              <i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="mobile-nav">
+        <div class="mobile-nav-logo-group">
+          <div class="brand-logo shadow-sm" aria-hidden="true">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="width:100%; height:100%; transform: scale(1.1);">
+              <defs>
+                <filter id="f-reactor-glow3" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur1" />
+                  <feGaussianBlur stdDeviation="6" result="blur2" />
+                  <feMerge>
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="f-grad-core3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+              </defs>
+              <g filter="url(#f-reactor-glow3)">
+                <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s"
+                    repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15"
+                  fill="none" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
+                    repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none"
+                  opacity="0.9">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s"
+                    repeatCount="indefinite" />
+                </circle>
+                <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z"
+                  fill="url(#f-grad-core3)">
+                  <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="39" cy="31" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="39" cy="68" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <line x1="15" y1="50" x2="85" y2="50" stroke="#bae6fd" stroke-width="1.5" opacity="0.7">
+                  <animate attributeName="y1" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                  <animate attributeName="y2" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                </line>
+              </g>
+            </svg>
+          </div>
+          <span class="mobile-nav-title">Fix <span>Agent</span></span>
+        </div>
+        <button data-hamburger aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="main-sidebar"
+          class="btn-hamburger">
+          <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div id="messages-container" class="content-area custom-scrollbar" aria-live="polite"
+        aria-label="Conversación con Fix AI">
+        <div id="empty-state" class="empty-state animate-fade-in-up">
+          <h1 class="empty-state-title">¿Qué tarea gestionamos hoy?</h1>
+          <p class="empty-state-subtitle">Selecciona una acción rápida o describe tu requerimiento en el panel inferior.
+          </p>
+
+          <div class="quick-cards-grid">
+            <button onclick="ChatUI.setInput('Analiza este código...')" aria-label="Iniciar auditoría de código"
+              class="quick-card">
+              <div class="quick-card-icon" aria-hidden="true">
+                <i class="fas fa-code"></i>
+              </div>
+              <span class="quick-card-title">Auditoría de Código</span>
+              <span class="quick-card-desc">Revisión y optimización</span>
+            </button>
+
+            <button onclick="ChatUI.setInput('Genera un reporte de...')" aria-label="Generar reporte"
+              class="quick-card violet animate-fade-in-up">
+              <div class="quick-card-icon" aria-hidden="true">
+                <i class="fas fa-file-lines"></i>
+              </div>
+              <span class="quick-card-title">Generar Reporte</span>
+              <span class="quick-card-desc">Documentación automática</span>
+            </button>
+
+            <button onclick="ChatUI.setInput('Estrategia de despliegue...')" aria-label="Diseñar arquitectura"
+              class="quick-card emerald animate-fade-in-up">
+              <div class="quick-card-icon" aria-hidden="true">
+                <i class="fas fa-diagram-project"></i>
+              </div>
+              <span class="quick-card-title">Arquitectura</span>
+              <span class="quick-card-desc">Diseño de sistemas</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="history-container" class="content-area custom-scrollbar is-hidden" aria-label="Historial de consultas">
+        <div class="animate-fade-in-up input-container">
+          <h2 class="history-header">
+            <i class="fas fa-clock-rotate-left history-icon"></i> Consultas Anteriores
+          </h2>
+          <div id="history-list" class="history-list">
+            <div class="history-empty">Cargando tu historial...</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="input-container-wrapper" class="input-wrapper">
+        <div class="input-container">
+          <div class="input-panel shadow-elevated">
+            <div class="input-inner">
+              <label for="chat-input" class="sr-only">Describe tu requerimiento</label>
+              <textarea id="chat-input" rows="1" placeholder="Describe tu requerimiento..."
+                class="chat-input custom-scrollbar"></textarea>
+              <button id="send-btn" class="btn-send" disabled aria-label="Enviar mensaje">
+                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="input-footer">
+              <div class="input-tools">
+              </div>
+              <div class="input-info">
+                <span class="input-info-text">Shift+Enter para nueva línea</span>
+                <span class="input-info-dot">·</span>
+                <span class="info-indicator" aria-hidden="true"></span>
+                <span class="input-info-model">FIX AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

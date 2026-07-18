@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fix Agent — Portal de acceso al asistente de IA para ingeniería de software.">
+  <title>Fix | Acceso Seguro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="css/base.css" rel="stylesheet">
+  <link href="css/animations.css" rel="stylesheet">
+  <link href="css/login.css" rel="stylesheet">
+</head>
+
+<body class="login-bg">
+
+  <canvas id="network-canvas" class="network-canvas" aria-hidden="true"></canvas>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <div class="login-top-line" aria-hidden="true"></div>
+
+  <div class="login-wrapper animate-fade-in-up">
+
+    <div class="card-glass">
+
+      <div class="login-content">
+        <div class="logo-container logo-glow">
+          <div class="brand-logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="f-reactor-glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="blur1" />
+                  <feGaussianBlur stdDeviation="6" result="blur2" />
+                  <feMerge>
+                    <feMergeNode in="blur2" />
+                    <feMergeNode in="blur1" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="f-grad-core" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+              </defs>
+              <g filter="url(#f-reactor-glow)">
+                <circle cx="50" cy="50" r="46" stroke="#0ea5e9" stroke-width="1" stroke-dasharray="2 6" fill="none">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="20s"
+                    repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="40" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="25 15 5 15"
+                  fill="none" opacity="0.7">
+                  <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s"
+                    repeatCount="indefinite" />
+                </circle>
+                <circle cx="50" cy="50" r="34" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 4" fill="none"
+                  opacity="0.9">
+                  <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="15s"
+                    repeatCount="indefinite" />
+                </circle>
+                <path d="M 32 25 L 72 25 L 72 38 L 48 38 L 48 48 L 65 48 L 65 60 L 48 60 L 48 75 L 32 75 Z"
+                  fill="url(#f-grad-core)">
+                  <animate attributeName="opacity" values="0.85;1;0.85" dur="2s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 65 31" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 54 L 58 54" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+                  stroke-dasharray="4 4">
+                  <animate attributeName="stroke-dashoffset" values="8;0" dur="0.5s" repeatCount="indefinite" />
+                </path>
+                <path d="M 39 31 L 39 68" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="39" cy="31" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="39" cy="68" r="3.5" fill="#ffffff">
+                  <animate attributeName="r" values="2.5;4.5;2.5" dur="1.5s" repeatCount="indefinite" />
+                </circle>
+                <line x1="15" y1="50" x2="85" y2="50" stroke="#bae6fd" stroke-width="1.5" opacity="0.7">
+                  <animate attributeName="y1" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                  <animate attributeName="y2" values="15;85;15" dur="4s" repeatCount="indefinite" />
+                </line>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <h1 class="login-title">
+          Fix <span>Agent</span>
+        </h1>
+        <p class="login-subtitle">Portal de Acceso</p>
+
+        <div id="error-alert-placeholder" class="error-alert-placeholder"></div>
+
+        <p class="login-greeting">Bienvenido de nuevo</p>
+
+        <button id="login-button" class="google-btn">
+          <span class="btn-content">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                <path fill="#4285F4"
+                  d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z" />
+                <path fill="#34A853"
+                  d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z" />
+                <path fill="#FBBC05"
+                  d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.734 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z" />
+                <path fill="#EA4335"
+                  d="M -14.754 43.989 C -12.984 43.989 -11.424 44.599 -10.174 45.789 L -6.704 42.319 C -8.804 40.359 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z" />
+              </g>
+            </svg>
+            <span>Continuar con Google</span>
+          </span>
+        </button>
+
+        <div class="login-divider">
+          <div class="line"></div>
+          <span>Acceso seguro</span>
+          <div class="line"></div>
+        </div>
+
+        <div class="login-features">
+          <span>
+            <svg fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Cifrado SSL
+          </span>
+          <span>
+            <svg fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Auth de Google
+          </span>
+          <span>
+            <svg fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd" />
+            </svg>
+            Sin contraseñas
+          </span>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <span>&copy;2025 Fix - Todos los derechos reservados</span>
+
+      </div>
+    </div>
+
+    <p class="powered-by">Powered by Google Cloud</p>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="login.js"></script>
+  <script>
+    const canvas = document.getElementById('network-canvas');
+    const ctx = canvas.getContext('2d');
+    let particlesArray;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+      update() {
+        if (this.x > canvas.width || this.x < 0) {
+          this.directionX = -this.directionX;
+        }
+        if (this.y > canvas.height || this.y < 0) {
+          this.directionY = -this.directionY;
+        }
+        this.x += this.directionX;
+        this.y += this.directionY;
+        this.draw();
+      }
+    }
+
+    function init() {
+      particlesArray = [];
+      let numberOfParticles = (canvas.height * canvas.width) / 10000;
+      for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 0.5;
+        let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
+        let directionX = (Math.random() * 0.4) - 0.2;
+        let directionY = (Math.random() * 0.4) - 0.2;
+        let color = 'rgba(2, 132, 199, 0.8)';
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+      }
+      connect();
+    }
+
+    function connect() {
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+            ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+          if (distance < 18000) {
+            let opacityValue = 1 - (distance / 18000);
+            ctx.strokeStyle = `rgba(1, 118, 211, ${opacityValue * 0.4})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    init();
+    animate();
+  </script>
+</body>
+
+</html>
